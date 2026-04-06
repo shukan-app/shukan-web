@@ -177,6 +177,29 @@ module.exports = {
         dependencyTypes: ["npm-peer"],
       },
     },
+
+    // Clean Architecture rules
+    {
+      name: "no-domain-to-others",
+      comment: "Domain layer must not be dependent on other layers",
+      severity: "error",
+      from: { path: "^app/model" },
+      to: { path: "^app/(application|infrastructure|components)" },
+    },
+    {
+      name: "no-application-to-outer-layers",
+      comment: "Application layer must be dependent only on the domain layer",
+      severity: "error",
+      from: { path: "^app/application" },
+      to: { path: "^app/(infrastructure|components)" },
+    },
+    {
+      name: "no-infrastructure-to-components",
+      comment: "Infrastructure layer must not be dependent on the components layer",
+      severity: "error",
+      from: { path: "^app/infrastructure" },
+      to: { path: "^app/components" },
+    },
   ],
   options: {
     // Which modules not to follow further when encountered
