@@ -27,6 +27,7 @@
     "@react-router/serve": "7.14.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "date-fns": "4.1.0",
     "dependency-cruiser": "17.3.10",
     "husky": "9.1.7",
     "isbot": "5.1.36",
