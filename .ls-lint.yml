@@ -1,0 +1,26 @@
+ls:
+  .ts: kebab-case
+  .tsx: kebab-case
+
+  app/infrastructure:
+    .ts: regex:^[a-z0-9-]+\.(repository|dto|mapper)$
+
+  app/application:
+    .ts: regex:^[a-z0-9-]+\.repository\.interface$
+
+  app/model:
+    .ts: regex:^[a-z0-9-]+\.model$
+
+  app/components:
+    .tsx: kebab-case
+
+ignore:
+  - .git
+  - .github
+  - .agents
+  - .react-router
+  - .vscode
+  - node_modules
+  - dist
+  - build
+  - coverage
