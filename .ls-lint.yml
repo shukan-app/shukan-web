@@ -2,17 +2,24 @@ ls:
   .ts: kebab-case
   .tsx: kebab-case
 
-  app/infrastructure:
-    .ts: regex:^[a-z0-9-]+\.(repository|dto|mapper)(\.test)?$
+  app/components:
+    .tsx: regex:^[a-z0-9-]+(\.test)?$
+
+  app/lib:
+    .ts: regex:^[a-z0-9-]+(\.test)?$
+
+  app/domain:
+    .ts: regex:^[a-z0-9-]+\.(entity|vo|ds)(\.test)?$
 
   app/application:
-    .ts: regex:^[a-z0-9-]+\.repository\.interface(\.test)?$
+    .ts: regex:^[a-z0-9-]+\.(usecase|repository\.interface)(\.test)?$
 
-  app/model:
-    .ts: regex:^[a-z0-9-]+\.model(\.test)?$
+  app/infrastructure:
+    .ts: regex:^[a-z0-9-]+\.(dto|mapper|repository)(\.test)?$
 
-  app/components:
-    .tsx: kebab-case
+  app/presentation:
+    .tsx: regex:^[a-z0-9-]+\.(container|presentational)(\.test)?$
+    .ts: regex:^use-[a-z0-9-]+(\.test)?$
 
 ignore:
   - .git
