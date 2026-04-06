@@ -7,6 +7,8 @@
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "test:dep": "depcruise",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
