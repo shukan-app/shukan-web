@@ -3,13 +3,13 @@ ls:
   .tsx: kebab-case
 
   app/infrastructure:
-    .ts: regex:^[a-z0-9-]+\.(repository|dto|mapper)$
+    .ts: regex:^[a-z0-9-]+\.(repository|dto|mapper)(\.test)?$
 
   app/application:
-    .ts: regex:^[a-z0-9-]+\.repository\.interface$
+    .ts: regex:^[a-z0-9-]+\.repository\.interface(\.test)?$
 
   app/model:
-    .ts: regex:^[a-z0-9-]+\.model$
+    .ts: regex:^[a-z0-9-]+\.model(\.test)?$
 
   app/components:
     .tsx: kebab-case
