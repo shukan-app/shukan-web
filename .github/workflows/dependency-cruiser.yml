@@ -1,0 +1,13 @@
+name: dependency-cruiser
+
+on:
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  report:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: MH4GF/dependency-cruiser-report-action@v2
