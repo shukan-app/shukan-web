@@ -11,7 +11,8 @@
 ## 実装
 
 - 実装は ドメイン層 → アプリケーション層 → インフラ層 → プレゼンテーション層 の順番で進めること。
-- 詳細は `./docs/architecture.rules.md` を参照すること。
+- 設計の詳細は `./docs/architecture.rules.md` を参照すること。
+- UIデザインの詳細は `./docs/design.rules.md` を参照すること。
 
 ## リンター実行
 
