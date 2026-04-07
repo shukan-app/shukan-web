@@ -18,8 +18,8 @@ ls:
     .ts: regex:^[a-z0-9-]+\.(dto|mapper|repository)(\.test)?$
 
   app/presentation:
-    .tsx: regex:^[a-z0-9-]+\.(container|presentational)(\.test)?$
-    .ts: regex:^(use-[a-z0-9-]+|[a-z0-9-]+\.(vd|vd-mapper))(\.test)?$
+    .tsx: regex:^[a-z0-9-]+(\.(container|presentational))?(\.test)?$
+    .ts: regex:^[a-z0-9-]+\.(hook|vd|vd-mapper)(\.test)?$
 
 ignore:
   - .git
