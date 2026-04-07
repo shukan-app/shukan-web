@@ -12,7 +12,7 @@
 - `Entity`, `Value Object` および `Domain Service` が対象。
 - 他のどの層にも依存してはならない。
 - `app/domain` ディレクトリ以下に配置すること。
-- ファイル名は `*.entity.ts`, `*.vo.ts` および `*.ds.ts` とすること。
+- ファイル名は `*.entity.ts`, `*.vo.ts` または `*.ds.ts` とすること。
 
 ### 例外
 
@@ -27,7 +27,7 @@
 - `UseCase` および `Interface Repository` が対象。
 - ドメイン層を除いた全ての層に依存してはならない。
 - `app/application` ディレクトリ以下に配置すること。
-- ファイル名は `*.usecase.ts` および `*.repository.interface.ts` とすること。
+- ファイル名は `*.usecase.ts` または `*.repository.interface.ts` とすること。
 
 ## インフラ層
 
@@ -36,7 +36,7 @@
 - `DTO` は必ず `RequestDto` および `ResponseDto` を作成し利用すること。
 - `DTO` と `Entity` の変換ロジックは必ず `Mapper` に実装すること。
 - `app/infrastructure` ディレクトリ以下に配置すること。
-- ファイル名は `*.dto.ts`, `*.mapper.ts` および `*.repository.ts` とすること。
+- ファイル名は `*.dto.ts`, `*.mapper.ts` または `*.repository.ts` とすること。
 
 ## プレゼンテーション層
 
@@ -47,5 +47,6 @@
 - `UseCase` から返された `Entity` を利用する場合は、必ず `ViewDataMapper` を使用して `ViewData` に変換して使用すること。
 - `Presentational Component` は `ViewData` またはプリミティブ型を `props` として受け取るようにすること。（責務分割および変更容易性の観点から `Entity` などは直接利用しないこと）
 - 画面別に `app/presentation/{page}` ディレクトリ以下に配置すること。
-- TSXファイル名は `*.container.tsx` および `*.presentational.tsx` とすること。
-- TSファイル名は `*.vd.ts` および `*.vd-mapper.ts` とすること。
+- コンポーネントのTSXファイル名は `*.tsx` とすること。
+- ただし、`Container / Presentationalパターン` に該当するコンポーネントのファイル名は `*.container.tsx` または `*.presentational.tsx` とすること。
+- TSファイル名は `*.hook.ts`, `*.vd.ts` または `*.vd-mapper.ts` とすること。
