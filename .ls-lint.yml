@@ -19,7 +19,7 @@ ls:
 
   app/presentation:
     .tsx: regex:^[a-z0-9-]+\.(container|presentational)(\.test)?$
-    .ts: regex:^use-[a-z0-9-]+(\.test)?$
+    .ts: regex:^(use-[a-z0-9-]+|[a-z0-9-]+\.(vd|vd-mapper))(\.test)?$
 
 ignore:
   - .git
