@@ -12,12 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
-      - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 24.13.0
           cache: npm
 
       - run: npm install --frozen-lockfile
