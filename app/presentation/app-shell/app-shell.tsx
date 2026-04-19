@@ -35,7 +35,7 @@ import { Separator } from "~/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "~/components/ui/sheet";
 import { cn } from "~/lib/utils";
 
-import { countUnreadNotifications, filterAppSearchResults } from "./app-shell.logic";
+import { countUnreadNotifications, filterAppSearchResults } from "./app-shell.vd-mapper";
 import { appShellViewData, type AppNavigationItemViewData, type AppSearchResultKind } from "./app-shell.vd";
 
 type AppShellProps = {

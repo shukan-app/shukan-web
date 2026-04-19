@@ -1,6 +1,6 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
-import { AppShell } from "~/components/app-shell";
+import { AppShell } from "~/presentation/app-shell/app-shell";
 
 import type { Route } from "./+types/root";
 import "./app.css";
