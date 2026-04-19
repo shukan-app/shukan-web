@@ -13,7 +13,7 @@ import {
   Notification03Icon,
   Search01Icon,
 } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { NavLink } from "react-router";
 
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
@@ -92,7 +92,7 @@ const iconByKey = {
   scout: Briefcase01Icon,
   event: Calendar03Icon,
   notification: Notification03Icon,
-} satisfies Record<AppIconKey, unknown>;
+} satisfies Record<AppIconKey, IconSvgElement>;
 
 function AppLogo({ serviceName }: AppLogoProps) {
   return (
