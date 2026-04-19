@@ -1,10 +1,12 @@
 import { Badge } from "~/components/ui/badge";
+import { cn } from "~/lib/utils";
 
 import type { DashboardDeadlineTone } from "./dashboard.vd";
 
 type DashboardDeadlineBadgeProps = {
   tone: DashboardDeadlineTone;
   label: string;
+  className?: string;
 };
 
 function getDeadlineBadgeVariant(deadlineTone: DashboardDeadlineTone) {
@@ -20,6 +22,10 @@ function getDeadlineBadgeVariant(deadlineTone: DashboardDeadlineTone) {
   }
 }
 
-export function DashboardDeadlineBadge({ tone, label }: DashboardDeadlineBadgeProps) {
-  return <Badge variant={getDeadlineBadgeVariant(tone)}>{label}</Badge>;
+export function DashboardDeadlineBadge({ tone, label, className }: DashboardDeadlineBadgeProps) {
+  return (
+    <Badge variant={getDeadlineBadgeVariant(tone)} className={cn(className)}>
+      {label}
+    </Badge>
+  );
 }

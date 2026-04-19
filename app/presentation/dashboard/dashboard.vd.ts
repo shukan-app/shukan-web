@@ -1,235 +1,156 @@
-export type DashboardViewMode = "card" | "list";
-
-export type DashboardSortOption = "deadline-asc" | "deadline-desc";
-
-export type DashboardStatusKey = "all" | "needs-action" | "interviewing" | "waiting" | "offer";
-
 export type DashboardDeadlineTone = "urgent" | "soon" | "normal" | "none";
 
 export type DashboardSummaryCardViewData = {
   id: string;
   label: string;
   value: string;
-  note: string;
+  completionRate: number | null;
+  navigationLabel: string | null;
 };
 
-export type DashboardUrgentTaskViewData = {
-  id: string;
-  companyName: string;
-  title: string;
-  dueLabel: string;
-  dueDate: string;
-  isAiGenerated: boolean;
-  deadlineTone: DashboardDeadlineTone;
-};
+export type DashboardAlertKind = "task-due-soon" | "unreplied-mail" | "backend-failure";
 
-export type DashboardCompanyViewData = {
+export type DashboardAlertViewData = {
   id: string;
-  companyName: string;
+  kind: DashboardAlertKind;
   title: string;
-  statusKey: DashboardStatusKey;
+  description: string;
   statusLabel: string;
-  statusDescription: string;
-  nextDeadlineLabel: string;
-  nextDeadlineAt: string | null;
   deadlineTone: DashboardDeadlineTone;
-  pendingTaskCount: number;
-  aiTaskCount: number;
-  updatedAtLabel: string;
-  progressLabel: string;
-  note: string;
-  tags: string[];
 };
 
-export type DashboardOptionViewData<TValue extends string> = {
-  value: TValue;
-  label: string;
+export type DashboardRecentTaskViewData = {
+  id: string;
+  taskType: string;
+  companyName: string;
+  dueLabel: string;
+  deadlineTone: DashboardDeadlineTone;
+  navigationLabel: string;
+};
+
+export type DashboardRecentEventViewData = {
+  id: string;
+  eventType: string;
+  companyName: string | null;
+  eventDateLabel: string;
+  deadlineTone: DashboardDeadlineTone;
+  navigationLabel: string;
+};
+
+export type DashboardRecentScoutViewData = {
+  id: string;
+  scoutType: string;
+  companyName: string;
+  serviceName: string;
+  navigationLabel: string;
 };
 
 export type DashboardViewData = {
-  generatedAtLabel: string;
+  title: string;
+  description: string;
+  lastUpdatedLabel: string;
   summaryCards: DashboardSummaryCardViewData[];
-  urgentTasks: DashboardUrgentTaskViewData[];
-  companies: DashboardCompanyViewData[];
-  statusOptions: DashboardOptionViewData<DashboardStatusKey>[];
-  sortOptions: DashboardOptionViewData<DashboardSortOption>[];
-  viewModeOptions: DashboardOptionViewData<DashboardViewMode>[];
+  alerts: DashboardAlertViewData[];
+  recentTask: DashboardRecentTaskViewData;
+  recentEvent: DashboardRecentEventViewData;
+  recentScout: DashboardRecentScoutViewData;
 };
 
 export const dashboardViewData: DashboardViewData = {
-  generatedAtLabel: "2026年4月7日 13:20 時点",
+  title: "今日やるべきこと",
+  description: "直近のタスク、イベント、スカウトを確認できます。",
+  lastUpdatedLabel: "最終更新: 2026年4月19日 12:30",
   summaryCards: [
     {
       id: "active-company-count",
-      label: "進行中の企業",
+      label: "進行中の企業数",
       value: "6社",
-      note: "今週中に更新が必要な企業 3社",
+      completionRate: null,
+      navigationLabel: "企業一覧へ",
     },
     {
-      id: "urgent-task-count",
-      label: "48時間以内のタスク",
-      value: "3件",
-      note: "ES提出 1件 / 面接準備 2件",
-    },
-    {
-      id: "ai-task-count",
-      label: "AI抽出タスク",
+      id: "incomplete-task-count",
+      label: "未完了のタスク数",
       value: "4件",
-      note: "自動解析の確認待ち 1件",
+      completionRate: null,
+      navigationLabel: "タスク一覧へ",
     },
     {
-      id: "scout-count",
-      label: "未読スカウト",
-      value: "6件",
-      note: "興味あり候補を優先表示",
+      id: "event-count",
+      label: "イベント数",
+      value: "3件",
+      completionRate: null,
+      navigationLabel: "イベント一覧へ",
+    },
+    {
+      id: "unread-scout-count",
+      label: "未読スカウト数",
+      value: "5件",
+      completionRate: null,
+      navigationLabel: "スカウト一覧へ",
+    },
+    {
+      id: "task-completion-rate",
+      label: "タスク完了率",
+      value: "68%",
+      completionRate: 68,
+      navigationLabel: null,
+    },
+    {
+      id: "last-updated-at",
+      label: "最終更新日時",
+      value: "12:30",
+      completionRate: null,
+      navigationLabel: null,
     },
   ],
-  urgentTasks: [
+  alerts: [
     {
-      id: "task-01",
-      companyName: "LayerX",
-      title: "ES提出",
-      dueLabel: "明日 18:00 まで",
-      dueDate: "2026-04-08T18:00:00+09:00",
-      isAiGenerated: true,
+      id: "alert-task-01",
+      kind: "task-due-soon",
+      title: "24時間以内に対応が必要なタスクがあります",
+      description: "LayerX の書類送信が明日 10:00 までです。",
+      statusLabel: "24時間以内",
       deadlineTone: "urgent",
     },
     {
-      id: "task-02",
-      companyName: "Sansan",
-      title: "一次面接の候補日返信",
-      dueLabel: "4月8日 12:00 まで",
-      dueDate: "2026-04-08T12:00:00+09:00",
-      isAiGenerated: true,
-      deadlineTone: "urgent",
-    },
-    {
-      id: "task-03",
-      companyName: "SmartHR",
-      title: "ポートフォリオ更新",
-      dueLabel: "4月9日 23:59 まで",
-      dueDate: "2026-04-09T23:59:00+09:00",
-      isAiGenerated: false,
+      id: "alert-mail-01",
+      kind: "unreplied-mail",
+      title: "2日以上返信していないメールがあります",
+      description: "Sansan からの面接候補日確認に返信していません。",
+      statusLabel: "2日以上未返信",
       deadlineTone: "soon",
     },
-  ],
-  companies: [
     {
-      id: "company-01",
-      companyName: "LayerX",
-      title: "プロダクトデザイナー",
-      statusKey: "needs-action",
-      statusLabel: "対応優先",
-      statusDescription: "ES未提出",
-      nextDeadlineLabel: "4月8日 18:00",
-      nextDeadlineAt: "2026-04-08T18:00:00+09:00",
-      deadlineTone: "urgent",
-      pendingTaskCount: 3,
-      aiTaskCount: 2,
-      updatedAtLabel: "最終更新: 3時間前",
-      progressLabel: "書類選考",
-      note: "AIが応募締切と提出書類を本文から抽出済み",
-      tags: ["締切間近", "デザイン職", "AI抽出あり"],
-    },
-    {
-      id: "company-02",
-      companyName: "Sansan",
-      title: "UXデザイナー",
-      statusKey: "interviewing",
-      statusLabel: "面接調整中",
-      statusDescription: "一次面接",
-      nextDeadlineLabel: "4月8日 12:00",
-      nextDeadlineAt: "2026-04-08T12:00:00+09:00",
-      deadlineTone: "urgent",
-      pendingTaskCount: 2,
-      aiTaskCount: 1,
-      updatedAtLabel: "最終更新: 6時間前",
-      progressLabel: "一次面接",
-      note: "候補日返信が未完了",
-      tags: ["日程調整", "返信待ち"],
-    },
-    {
-      id: "company-03",
-      companyName: "SmartHR",
-      title: "プロダクトデザイナー",
-      statusKey: "needs-action",
-      statusLabel: "準備中",
-      statusDescription: "課題選考",
-      nextDeadlineLabel: "4月9日 23:59",
-      nextDeadlineAt: "2026-04-09T23:59:00+09:00",
-      deadlineTone: "soon",
-      pendingTaskCount: 4,
-      aiTaskCount: 1,
-      updatedAtLabel: "最終更新: 1日前",
-      progressLabel: "課題提出",
-      note: "手動追加したタスクが1件あります",
-      tags: ["課題あり", "ポートフォリオ"],
-    },
-    {
-      id: "company-04",
-      companyName: "freee",
-      title: "UIデザイナー",
-      statusKey: "waiting",
-      statusLabel: "結果待ち",
-      statusDescription: "二次面接結果",
-      nextDeadlineLabel: "4月12日 10:00",
-      nextDeadlineAt: "2026-04-12T10:00:00+09:00",
+      id: "alert-backend-01",
+      kind: "backend-failure",
+      title: "バックエンド処理の失敗通知があります",
+      description: "1件のメール解析に失敗しました。",
+      statusLabel: "処理失敗",
       deadlineTone: "normal",
-      pendingTaskCount: 1,
-      aiTaskCount: 0,
-      updatedAtLabel: "最終更新: 2日前",
-      progressLabel: "二次面接",
-      note: "お礼メール送付済み",
-      tags: ["結果待ち"],
-    },
-    {
-      id: "company-05",
-      companyName: "サイバーエージェント",
-      title: "クリエイティブ職",
-      statusKey: "offer",
-      statusLabel: "オファー",
-      statusDescription: "面談調整",
-      nextDeadlineLabel: "4月15日 17:00",
-      nextDeadlineAt: "2026-04-15T17:00:00+09:00",
-      deadlineTone: "normal",
-      pendingTaskCount: 1,
-      aiTaskCount: 0,
-      updatedAtLabel: "最終更新: 3日前",
-      progressLabel: "オファー面談",
-      note: "条件面談の日程候補あり",
-      tags: ["内定関連"],
-    },
-    {
-      id: "company-06",
-      companyName: "メルカリ",
-      title: "Product Designer",
-      statusKey: "waiting",
-      statusLabel: "返信待ち",
-      statusDescription: "書類通過連絡待ち",
-      nextDeadlineLabel: "期限未設定",
-      nextDeadlineAt: null,
-      deadlineTone: "none",
-      pendingTaskCount: 0,
-      aiTaskCount: 0,
-      updatedAtLabel: "最終更新: 5日前",
-      progressLabel: "応募済み",
-      note: "現時点で未完了タスクはありません",
-      tags: ["待機中"],
     },
   ],
-  statusOptions: [
-    { value: "all", label: "すべて" },
-    { value: "needs-action", label: "対応優先" },
-    { value: "interviewing", label: "面接中" },
-    { value: "waiting", label: "結果待ち" },
-    { value: "offer", label: "オファー" },
-  ],
-  sortOptions: [
-    { value: "deadline-asc", label: "期限が近い順" },
-    { value: "deadline-desc", label: "期限が遠い順" },
-  ],
-  viewModeOptions: [
-    { value: "card", label: "カード" },
-    { value: "list", label: "リスト" },
-  ],
+  recentTask: {
+    id: "task-01",
+    taskType: "書類送信",
+    companyName: "LayerX",
+    dueLabel: "明日 10:00 まで",
+    deadlineTone: "urgent",
+    navigationLabel: "タスク一覧へ",
+  },
+  recentEvent: {
+    id: "event-01",
+    eventType: "面接",
+    companyName: "freee",
+    eventDateLabel: "4月20日 14:00",
+    deadlineTone: "urgent",
+    navigationLabel: "イベント一覧へ",
+  },
+  recentScout: {
+    id: "scout-01",
+    scoutType: "インターン",
+    companyName: "メルカリ",
+    serviceName: "サポーターズ",
+    navigationLabel: "スカウト一覧へ",
+  },
 };

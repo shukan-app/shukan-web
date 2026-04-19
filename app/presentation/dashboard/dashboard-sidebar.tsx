@@ -1,58 +1,146 @@
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import { DashboardDeadlineBadge } from "./dashboard-deadline-badge";
-import type { DashboardViewData } from "./dashboard.vd";
+import type {
+  DashboardRecentEventViewData,
+  DashboardRecentScoutViewData,
+  DashboardRecentTaskViewData,
+  DashboardViewData,
+} from "./dashboard.vd";
 
 type DashboardSidebarProps = {
   dashboard: DashboardViewData;
 };
 
+type RecentTaskListProps = {
+  task: DashboardRecentTaskViewData;
+};
+
+type RecentEventListProps = {
+  event: DashboardRecentEventViewData;
+};
+
+type RecentScoutListProps = {
+  scout: DashboardRecentScoutViewData;
+};
+
+const hoverReadableBadgeClass =
+  "transition-colors group-hover:border-primary-foreground/60 group-hover:bg-primary-foreground/15 group-hover:text-primary-foreground";
+
+function RecentTask({ task }: RecentTaskListProps) {
+  return (
+    <Card className="group border border-border/70 bg-card/90 transition-colors hover:border-primary hover:bg-linear-to-br hover:from-primary hover:to-chart-3 hover:text-primary-foreground">
+      <CardHeader>
+        <CardTitle>直近のタスク</CardTitle>
+      </CardHeader>
+      <CardContent className="flex items-end justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className={hoverReadableBadgeClass}>
+              {task.taskType}
+            </Badge>
+            <DashboardDeadlineBadge
+              tone={task.deadlineTone}
+              label={task.dueLabel}
+              className={hoverReadableBadgeClass}
+            />
+          </div>
+          <p className="font-medium">{task.companyName}</p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-sm"
+          className="transition-colors group-hover:border-primary-foreground/60 group-hover:bg-primary-foreground group-hover:text-primary"
+          aria-label={task.navigationLabel}
+          disabled
+        >
+          <HugeiconsIcon icon={ArrowRight01Icon} />
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function RecentEvent({ event }: RecentEventListProps) {
+  return (
+    <Card className="group border border-border/70 bg-card/90 transition-colors hover:border-primary hover:bg-linear-to-br hover:from-primary hover:to-chart-3 hover:text-primary-foreground">
+      <CardHeader>
+        <CardTitle>直近のイベント</CardTitle>
+      </CardHeader>
+      <CardContent className="flex items-end justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className={hoverReadableBadgeClass}>
+              {event.eventType}
+            </Badge>
+            <DashboardDeadlineBadge
+              tone={event.deadlineTone}
+              label={event.eventDateLabel}
+              className={hoverReadableBadgeClass}
+            />
+          </div>
+          <p className="font-medium">{event.companyName ?? "企業未設定"}</p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-sm"
+          className="transition-colors group-hover:border-primary-foreground/60 group-hover:bg-primary-foreground group-hover:text-primary"
+          aria-label={event.navigationLabel}
+          disabled
+        >
+          <HugeiconsIcon icon={ArrowRight01Icon} />
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function RecentScout({ scout }: RecentScoutListProps) {
+  return (
+    <Card className="group border border-border/70 bg-card/90 transition-colors hover:border-primary hover:bg-linear-to-br hover:from-primary hover:to-chart-3 hover:text-primary-foreground">
+      <CardHeader>
+        <CardTitle>直近のスカウト</CardTitle>
+      </CardHeader>
+      <CardContent className="flex items-end justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className={hoverReadableBadgeClass}>
+              {scout.scoutType}
+            </Badge>
+            <Badge variant="secondary" className={hoverReadableBadgeClass}>
+              {scout.serviceName}
+            </Badge>
+          </div>
+          <p className="font-medium">{scout.companyName}</p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-sm"
+          className="transition-colors group-hover:border-primary-foreground/60 group-hover:bg-primary-foreground group-hover:text-primary"
+          aria-label={scout.navigationLabel}
+          disabled
+        >
+          <HugeiconsIcon icon={ArrowRight01Icon} />
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function DashboardSidebar({ dashboard }: DashboardSidebarProps) {
   return (
-    <div className="flex flex-col gap-6">
-      <Card className="border border-border/70 bg-card/90 backdrop-blur">
-        <CardHeader>
-          <CardTitle>直近タスク</CardTitle>
-          <CardDescription>期限が近い順に並べています。</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          {dashboard.urgentTasks.map((task, index) => (
-            <div key={task.id} className="flex flex-col gap-4">
-              {index > 0 ? <Separator /> : null}
-              <div className="flex flex-col gap-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <DashboardDeadlineBadge tone={task.deadlineTone} label={task.dueLabel} />
-                  {task.isAiGenerated ? <Badge variant="secondary">AI</Badge> : <Badge variant="outline">手動</Badge>}
-                </div>
-                <div className="flex flex-col gap-1">
-                  <p className="font-medium">{task.title}</p>
-                  <p className="text-sm text-muted-foreground">{task.companyName}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </CardContent>
-        <CardFooter className="border-t border-border/70">
-          <Button type="button" variant="outline" className="w-full">
-            すべてのタスクを見る
-          </Button>
-        </CardFooter>
-      </Card>
-
-      <Card className="border border-border/70 bg-card/90 backdrop-blur">
-        <CardHeader>
-          <CardTitle>画面の意図</CardTitle>
-          <CardDescription>Phase 1 では UI モックとして、意思決定しやすい導線を優先しています。</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3 text-sm text-muted-foreground">
-          <p>企業一覧はカードとリストを即時に切り替え可能です。</p>
-          <p>期限は未完了タスクのうち最も近いものを想定して表示しています。</p>
-          <p>AI抽出タスクと手動追加タスクが識別できるよう、バッジで差を付けています。</p>
-        </CardContent>
-      </Card>
-    </div>
+    <section className="grid gap-4 lg:grid-cols-3">
+      <RecentTask task={dashboard.recentTask} />
+      <RecentEvent event={dashboard.recentEvent} />
+      <RecentScout scout={dashboard.recentScout} />
+    </section>
   );
 }
