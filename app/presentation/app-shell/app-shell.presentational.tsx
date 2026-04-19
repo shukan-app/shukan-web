@@ -35,16 +35,52 @@ import { Separator } from "~/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "~/components/ui/sheet";
 import { cn } from "~/lib/utils";
 
-import { countUnreadNotifications, filterAppSearchResults } from "./app-shell.vd-mapper";
-import { appShellViewData, type AppNavigationItemViewData, type AppSearchResultKind } from "./app-shell.vd";
+import { useAppShellSearch, useUnreadNotificationCount } from "./app-shell.hook";
+import type {
+  AppAccountViewData,
+  AppNavigationItemViewData,
+  AppNotificationViewData,
+  AppSearchResultKind,
+  AppSearchResultViewData,
+  AppShellViewData,
+} from "./app-shell.vd";
 
-type AppShellProps = {
+type AppShellPresentationalProps = {
+  appShell: AppShellViewData;
   children: React.ReactNode;
 };
 
 type NavigationListProps = {
   items: AppNavigationItemViewData[];
   compact?: boolean;
+};
+
+type AppLogoProps = {
+  serviceName: string;
+};
+
+type AppSidebarProps = {
+  appShell: AppShellViewData;
+};
+
+type MobileNavigationProps = {
+  appShell: AppShellViewData;
+};
+
+type AppSearchProps = {
+  searchResults: AppSearchResultViewData[];
+};
+
+type NotificationsMenuProps = {
+  notifications: AppNotificationViewData[];
+};
+
+type AccountMenuProps = {
+  account: AppAccountViewData;
+};
+
+type AppHeaderProps = {
+  appShell: AppShellViewData;
 };
 
 type AppIconKey = AppNavigationItemViewData["icon"] | AppSearchResultKind | "notification";
@@ -58,13 +94,13 @@ const iconByKey = {
   notification: Notification03Icon,
 } satisfies Record<AppIconKey, unknown>;
 
-function AppLogo() {
+function AppLogo({ serviceName }: AppLogoProps) {
   return (
     <div className="flex h-16 items-center gap-3 px-4">
       <span className="flex size-9 items-center justify-center rounded-3xl bg-primary text-primary-foreground">
         <HugeiconsIcon icon={Briefcase01Icon} />
       </span>
-      <span className="font-heading text-lg font-semibold tracking-normal">{appShellViewData.serviceName}</span>
+      <span className="font-heading text-lg font-semibold tracking-normal">{serviceName}</span>
     </div>
   );
 }
@@ -113,19 +149,19 @@ function NavigationList({ items, compact = false }: NavigationListProps) {
   );
 }
 
-function AppSidebar() {
+function AppSidebar({ appShell }: AppSidebarProps) {
   return (
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r bg-sidebar text-sidebar-foreground lg:flex lg:flex-col">
-      <AppLogo />
+      <AppLogo serviceName={appShell.serviceName} />
       <Separator />
       <div className="flex flex-1 flex-col gap-4 py-4">
-        <NavigationList items={appShellViewData.navigationItems} />
+        <NavigationList items={appShell.navigationItems} />
       </div>
     </aside>
   );
 }
 
-function MobileNavigation() {
+function MobileNavigation({ appShell }: MobileNavigationProps) {
   return (
     <Sheet>
       <SheetTrigger render={<Button type="button" variant="ghost" size="icon-sm" className="lg:hidden" />}>
@@ -134,18 +170,16 @@ function MobileNavigation() {
       </SheetTrigger>
       <SheetContent side="left" className="w-80 max-w-[88vw]">
         <SheetHeader>
-          <SheetTitle>{appShellViewData.serviceName}</SheetTitle>
+          <SheetTitle>{appShell.serviceName}</SheetTitle>
         </SheetHeader>
-        <NavigationList items={appShellViewData.navigationItems} compact />
+        <NavigationList items={appShell.navigationItems} compact />
       </SheetContent>
     </Sheet>
   );
 }
 
-function AppSearch() {
-  const [query, setQuery] = React.useState("");
-  const [selectedId, setSelectedId] = React.useState<string | null>(null);
-  const results = filterAppSearchResults(appShellViewData.searchResults, query);
+function AppSearch({ searchResults }: AppSearchProps) {
+  const { query, setQuery, selectedId, results, selectResult } = useAppShellSearch(searchResults);
 
   return (
     <Popover>
@@ -180,7 +214,7 @@ function AppSearch() {
                       "flex w-full items-center gap-3 rounded-3xl px-3 py-2 text-left text-sm transition-colors hover:bg-muted",
                       selectedId === result.id && "bg-muted",
                     )}
-                    onClick={() => setSelectedId(result.id)}
+                    onClick={() => selectResult(result.id)}
                   >
                     <span className="flex size-9 shrink-0 items-center justify-center rounded-3xl bg-secondary text-secondary-foreground">
                       <HugeiconsIcon icon={icon} />
@@ -205,8 +239,8 @@ function AppSearch() {
   );
 }
 
-function NotificationsMenu() {
-  const unreadCount = countUnreadNotifications(appShellViewData.notifications);
+function NotificationsMenu({ notifications }: NotificationsMenuProps) {
+  const unreadCount = useUnreadNotificationCount(notifications);
 
   return (
     <Popover>
@@ -225,7 +259,7 @@ function NotificationsMenu() {
           <PopoverTitle className="text-sm">通知</PopoverTitle>
         </PopoverHeader>
         <div className="flex flex-col gap-1">
-          {appShellViewData.notifications.map((notification) => (
+          {notifications.map((notification) => (
             <div key={notification.id} className="flex gap-3 rounded-3xl px-3 py-2">
               <span
                 className={cn(
@@ -251,12 +285,12 @@ function NotificationsMenu() {
   );
 }
 
-function AccountMenu() {
+function AccountMenu({ account }: AccountMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button type="button" variant="ghost" size="icon-sm" />}>
         <Avatar size="sm">
-          <AvatarFallback>{appShellViewData.account.initials}</AvatarFallback>
+          <AvatarFallback>{account.initials}</AvatarFallback>
         </Avatar>
         <span className="sr-only">アカウント</span>
       </DropdownMenuTrigger>
@@ -267,16 +301,14 @@ function AccountMenu() {
             <HugeiconsIcon icon={Clock01Icon} />
             <span className="flex flex-col">
               <span>最終同期日時</span>
-              <span className="text-xs text-muted-foreground">{appShellViewData.account.lastSyncedAtLabel}</span>
+              <span className="text-xs text-muted-foreground">{account.lastSyncedAtLabel}</span>
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <HugeiconsIcon icon={MailValidation01Icon} />
             <span className="flex flex-col">
               <span>Gmail連携状態</span>
-              <span className="text-xs text-muted-foreground">
-                {appShellViewData.account.gmailConnectionStatusLabel}
-              </span>
+              <span className="text-xs text-muted-foreground">{account.gmailConnectionStatusLabel}</span>
             </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -295,33 +327,33 @@ function AccountMenu() {
   );
 }
 
-function AppHeader() {
+function AppHeader({ appShell }: AppHeaderProps) {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/70">
       <div className="flex h-16 items-center gap-3 px-4 sm:px-6 lg:px-8">
-        <MobileNavigation />
+        <MobileNavigation appShell={appShell} />
         <div className="lg:hidden">
-          <span className="font-heading text-lg font-semibold tracking-normal">{appShellViewData.serviceName}</span>
+          <span className="font-heading text-lg font-semibold tracking-normal">{appShell.serviceName}</span>
         </div>
         <div className="flex flex-1 justify-center">
-          <AppSearch />
+          <AppSearch searchResults={appShell.searchResults} />
         </div>
         <div className="flex items-center gap-1">
-          <NotificationsMenu />
-          <AccountMenu />
+          <NotificationsMenu notifications={appShell.notifications} />
+          <AccountMenu account={appShell.account} />
         </div>
       </div>
     </header>
   );
 }
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShellPresentational({ appShell, children }: AppShellPresentationalProps) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex min-h-screen">
-        <AppSidebar />
+        <AppSidebar appShell={appShell} />
         <div className="flex min-w-0 flex-1 flex-col">
-          <AppHeader />
+          <AppHeader appShell={appShell} />
           <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
         </div>
       </div>

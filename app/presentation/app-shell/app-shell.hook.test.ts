@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { countUnreadNotifications, filterAppSearchResults } from "./app-shell.vd-mapper";
+import { countUnreadNotifications, filterAppSearchResults } from "./app-shell.hook";
 import type { AppNotificationViewData, AppSearchResultViewData } from "./app-shell.vd";
 
 const searchResults = [

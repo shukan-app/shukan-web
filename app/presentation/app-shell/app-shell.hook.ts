@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import type { AppNotificationViewData, AppSearchResultViewData } from "./app-shell.vd";
 
 export function filterAppSearchResults(results: AppSearchResultViewData[], query: string) {
@@ -15,4 +17,22 @@ export function filterAppSearchResults(results: AppSearchResultViewData[], query
 
 export function countUnreadNotifications(notifications: AppNotificationViewData[]) {
   return notifications.filter((notification) => notification.isUnread).length;
+}
+
+export function useAppShellSearch(searchResults: AppSearchResultViewData[]) {
+  const [query, setQuery] = React.useState("");
+  const [selectedId, setSelectedId] = React.useState<string | null>(null);
+  const results = React.useMemo(() => filterAppSearchResults(searchResults, query), [query, searchResults]);
+
+  return {
+    query,
+    setQuery,
+    selectedId,
+    results,
+    selectResult: setSelectedId,
+  };
+}
+
+export function useUnreadNotificationCount(notifications: AppNotificationViewData[]) {
+  return React.useMemo(() => countUnreadNotifications(notifications), [notifications]);
 }

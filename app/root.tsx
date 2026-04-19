@@ -1,6 +1,6 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
-import { AppShell } from "~/presentation/app-shell/app-shell";
+import { AppShellContainer } from "~/presentation/app-shell/app-shell.container";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -38,9 +38,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <AppShell>
+    <AppShellContainer>
       <Outlet />
-    </AppShell>
+    </AppShellContainer>
   );
 }
 
