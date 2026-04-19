@@ -40,6 +40,7 @@ import type {
   AppAccountViewData,
   AppNavigationItemViewData,
   AppNotificationViewData,
+  AppNotificationTone,
   AppSearchResultKind,
   AppSearchResultViewData,
   AppShellViewData,
@@ -93,6 +94,12 @@ const iconByKey = {
   event: Calendar03Icon,
   notification: Notification03Icon,
 } satisfies Record<AppIconKey, IconSvgElement>;
+
+const notificationToneIconClassName = {
+  info: "bg-secondary text-secondary-foreground",
+  warning: "bg-warning/10 text-warning",
+  error: "bg-destructive/10 text-destructive",
+} satisfies Record<AppNotificationTone, string>;
 
 function AppLogo({ serviceName }: AppLogoProps) {
   return (
@@ -266,8 +273,8 @@ function NotificationsMenu({ notifications }: NotificationsMenuProps) {
             <div key={notification.id} className="flex gap-3 rounded-3xl px-3 py-2">
               <span
                 className={cn(
-                  "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-3xl bg-secondary text-secondary-foreground",
-                  notification.tone === "error" && "bg-destructive/10 text-destructive",
+                  "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-3xl",
+                  notificationToneIconClassName[notification.tone],
                 )}
               >
                 <HugeiconsIcon icon={notification.tone === "info" ? Notification03Icon : AlertCircleIcon} />
