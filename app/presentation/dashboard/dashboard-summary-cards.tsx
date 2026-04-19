@@ -1,6 +1,6 @@
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { Label, PolarAngleAxis, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
 import { Button } from "~/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
@@ -24,13 +24,21 @@ function TaskCompletionRateChart({ value, label }: TaskCompletionRateChartProps)
       <RadialBarChart
         accessibilityLayer
         data={chartData}
-        endAngle={(value / 100) * 360}
+        endAngle={360}
         innerRadius={54}
         outerRadius={68}
         startAngle={0}
         width={144}
         height={144}
       >
+        <PolarAngleAxis
+          type="number"
+          domain={[0, 100]}
+          allowDataOverflow
+          tick={false}
+          tickLine={false}
+          axisLine={false}
+        />
         <PolarGrid gridType="circle" radialLines={false} stroke="none" polarRadius={[54, 48]} />
         <RadialBar dataKey="value" background cornerRadius={8} />
         <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
