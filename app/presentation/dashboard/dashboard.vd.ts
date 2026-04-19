@@ -59,7 +59,7 @@ export type DashboardViewData = {
 export const dashboardViewData: DashboardViewData = {
   title: "今日やるべきこと",
   description: "直近のタスク、イベント、スカウトを確認できます。",
-  lastUpdatedLabel: "最終更新: 2026年4月19日 12:30",
+  lastUpdatedLabel: "モックデータ: 最終更新日時は未接続",
   summaryCards: [
     {
       id: "active-company-count",
@@ -99,7 +99,7 @@ export const dashboardViewData: DashboardViewData = {
     {
       id: "last-updated-at",
       label: "最終更新日時",
-      value: "12:30",
+      value: "未接続",
       completionRate: null,
       navigationLabel: null,
     },
