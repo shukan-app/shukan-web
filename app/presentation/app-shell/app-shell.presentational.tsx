@@ -183,19 +183,24 @@ function AppSearch({ searchResults }: AppSearchProps) {
 
   return (
     <Popover>
-      <PopoverTrigger render={<div className="relative w-full max-w-xl" />}>
+      <div className="relative w-full max-w-xl">
         <HugeiconsIcon
           icon={Search01Icon}
           className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
         />
-        <Input
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="検索"
-          className="pl-10"
-          aria-label="全体検索"
+        <PopoverTrigger
+          render={
+            <Input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="検索"
+              className="pl-10"
+              aria-label="全体検索"
+            />
+          }
         />
-      </PopoverTrigger>
+      </div>
       <PopoverContent align="start" className="w-[min(36rem,calc(100vw-2rem))] p-2">
         <PopoverHeader className="px-2 py-1">
           <PopoverTitle className="text-sm">検索結果</PopoverTitle>
@@ -241,18 +246,16 @@ function AppSearch({ searchResults }: AppSearchProps) {
 
 function NotificationsMenu({ notifications }: NotificationsMenuProps) {
   const unreadCount = useUnreadNotificationCount(notifications);
+  const notificationLabel = unreadCount > 0 ? `通知、未読${unreadCount}件` : "通知";
 
   return (
     <Popover>
       <PopoverTrigger render={<Button type="button" variant="ghost" size="icon-sm" className="relative" />}>
         <HugeiconsIcon icon={Notification03Icon} />
         {unreadCount > 0 && (
-          <span
-            className="absolute top-1.5 right-1.5 size-2 rounded-full bg-destructive"
-            aria-label={`${unreadCount}件の未読通知`}
-          />
+          <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-destructive" aria-hidden="true" />
         )}
-        <span className="sr-only">通知</span>
+        <span className="sr-only">{notificationLabel}</span>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[min(22rem,calc(100vw-2rem))] p-2">
         <PopoverHeader className="px-2 py-1">
