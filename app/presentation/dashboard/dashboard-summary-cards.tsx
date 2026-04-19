@@ -80,7 +80,7 @@ export function DashboardSummaryCards({ cards }: DashboardSummaryCardsProps) {
             <CardDescription className="transition-colors group-hover:text-primary-foreground/80">
               {card.label}
             </CardDescription>
-            {card.completionRate === null ? (
+            {card.kind === "value" ? (
               <CardTitle className="text-4xl font-semibold sm:text-5xl">{card.value}</CardTitle>
             ) : (
               <TaskCompletionRateChart value={card.completionRate} label={card.label} />

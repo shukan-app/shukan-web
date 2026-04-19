@@ -1,12 +1,20 @@
 export type DashboardDeadlineTone = "urgent" | "soon" | "normal" | "none";
 
-export type DashboardSummaryCardViewData = {
+type DashboardSummaryCardBaseViewData = {
   id: string;
   label: string;
-  value: string;
-  completionRate: number | null;
   navigationLabel: string | null;
 };
+
+export type DashboardSummaryCardViewData =
+  | (DashboardSummaryCardBaseViewData & {
+      kind: "value";
+      value: string;
+    })
+  | (DashboardSummaryCardBaseViewData & {
+      kind: "rate";
+      completionRate: number;
+    });
 
 export type DashboardAlertKind = "task-due-soon" | "unreplied-mail" | "backend-failure";
 
@@ -63,44 +71,44 @@ export const dashboardViewData: DashboardViewData = {
   summaryCards: [
     {
       id: "active-company-count",
+      kind: "value",
       label: "進行中の企業数",
       value: "6社",
-      completionRate: null,
       navigationLabel: "企業一覧へ",
     },
     {
       id: "incomplete-task-count",
+      kind: "value",
       label: "未完了のタスク数",
       value: "4件",
-      completionRate: null,
       navigationLabel: "タスク一覧へ",
     },
     {
       id: "event-count",
+      kind: "value",
       label: "イベント数",
       value: "3件",
-      completionRate: null,
       navigationLabel: "イベント一覧へ",
     },
     {
       id: "unread-scout-count",
+      kind: "value",
       label: "未読スカウト数",
       value: "5件",
-      completionRate: null,
       navigationLabel: "スカウト一覧へ",
     },
     {
       id: "task-completion-rate",
+      kind: "rate",
       label: "タスク完了率",
-      value: "68%",
       completionRate: 68,
       navigationLabel: null,
     },
     {
       id: "last-updated-at",
+      kind: "value",
       label: "最終更新日時",
       value: "未接続",
-      completionRate: null,
       navigationLabel: null,
     },
   ],
